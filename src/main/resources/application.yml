@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: lead-crm
+
+  config:
+    import: optional:file:./.env[.properties]
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/leadcrm}
+    username: ${DB_USERNAME:leadcrm}
+    password: ${DB_PASSWORD:leadcrm}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+
+  thymeleaf:
+    cache: false
+
+server:
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        same-site: lax
+
+app:
+  admin:
+    email: ${ADMIN_EMAIL:admin@glowuprizz.com}
+    password: ${ADMIN_PASSWORD:admin1234}
+  public-base-url: ${PUBLIC_BASE_URL:http://localhost:8081}
+  admin-base-url: ${ADMIN_BASE_URL:http://localhost:8080}
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+
+---
+spring:
+  config:
+    activate:
+      on-profile: admin
+server:
+  port: 8080
+
+---
+spring:
+  config:
+    activate:
+      on-profile: publicform
+server:
+  port: 8081
