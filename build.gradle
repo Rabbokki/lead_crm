@@ -41,7 +41,6 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testAnnotationProcessor 'org.projectlombok:lombok'
-	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
 	// HTML 파싱 (템플릿 필드 추출, form action 주입)
 	implementation 'org.jsoup:jsoup:1.18.1'
 	// API 문서 (Swagger UI)

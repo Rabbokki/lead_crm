@@ -58,5 +58,11 @@ spring:
   config:
     activate:
       on-profile: publicform
+  # 공개 폼 서버에는 관리자 인증이 없다. UserDetailsService 빈이 없을 때 스프링 부트가
+  # 자동 생성하는 기본 인메모리 계정(로그에 "Using generated security password")을 막기 위해
+  # 해당 auto-configuration을 publicform 프로파일에서만 제외한다. admin 프로파일에는 영향 없음.
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration
 server:
   port: 8081

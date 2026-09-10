@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>캠페인 목록</title>
+</head>
+<body>
+<h1>캠페인 목록</h1>
+
+<form th:action="@{/logout}" method="post">
+    <button type="submit">로그아웃</button>
+</form>
+
+<h2>캠페인</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>이름</th>
+        <th>방문</th>
+        <th>방문자</th>
+        <th>신청</th>
+        <th>전환율(%)</th>
+        <th>상세</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="c : ${campaigns}">
+        <td th:text="${c.campaignName}">-</td>
+        <td th:text="${c.visits}">0</td>
+        <td th:text="${c.visitors}">0</td>
+        <td th:text="${c.submissions}">0</td>
+        <td th:text="${c.conversionRate}">0.0</td>
+        <td><a th:href="@{/admin/campaigns/{id}(id=${c.campaignId})}">상세</a></td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(campaigns)}">
+        <td colspan="6">캠페인이 없습니다.</td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>캠페인 생성</h2>
+<form th:action="@{/admin/campaigns}" method="post">
+    <div>
+        <label>이름 <input type="text" name="name" required></label>
+    </div>
+    <div>
+        <label>설명 <input type="text" name="description"></label>
+    </div>
+    <button type="submit">캠페인 생성</button>
+</form>
+
+<h2>HTML 템플릿 등록</h2>
+<form th:action="@{/admin/templates}" method="post">
+    <div>
+        <label>이름 <input type="text" name="name" required></label>
+    </div>
+    <div>
+        <label>HTML<br>
+            <textarea name="rawHtml" rows="10" cols="80" required></textarea>
+        </label>
+    </div>
+    <button type="submit">템플릿 등록</button>
+</form>
+</body>
+</html>

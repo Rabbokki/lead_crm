@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>캠페인 상세</title>
+</head>
+<body>
+<p><a th:href="@{/admin/campaigns}">← 캠페인 목록</a></p>
+
+<h1 th:text="${detail.summary.campaignName}">캠페인</h1>
+
+<h2>요약</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>방문</th>
+        <th>방문자</th>
+        <th>신청</th>
+        <th>전환율(%)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td th:text="${detail.summary.visits}">0</td>
+        <td th:text="${detail.summary.visitors}">0</td>
+        <td th:text="${detail.summary.submissions}">0</td>
+        <td th:text="${detail.summary.conversionRate}">0.0</td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>채널별 성과</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>채널</th>
+        <th>방문</th>
+        <th>방문자</th>
+        <th>신청</th>
+        <th>전환율(%)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="ch : ${detail.channels}">
+        <td th:text="${ch.channel}">-</td>
+        <td th:text="${ch.visits}">0</td>
+        <td th:text="${ch.visitors}">0</td>
+        <td th:text="${ch.submissions}">0</td>
+        <td th:text="${ch.conversionRate}">0.0</td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>폼</h2>
+<div th:each="form : ${detail.forms}" style="margin-bottom:1em">
+    <h3 th:text="${form.name}">폼</h3>
+    <p>필드:
+        <span th:each="fd,it : ${form.fieldSchema}">
+            <span th:text="${fd.name}">name</span>(<span th:text="${fd.type}">text</span><span th:if="${fd.required}">, 필수</span>)<span th:if="${!it.last}">, </span>
+        </span>
+    </p>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>채널</th>
+            <th>code</th>
+            <th>URL</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="link : ${form.links}">
+            <td th:text="${link.channel}">-</td>
+            <td th:text="${link.code}">-</td>
+            <td th:text="${link.url}">-</td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(form.links)}">
+            <td colspan="3">발급된 링크가 없습니다.</td>
+        </tr>
+        </tbody>
+    </table>
+    <form th:action="@{/admin/forms/{formId}/links(formId=${form.id})}" method="post">
+        <input type="hidden" name="campaignId" th:value="${campaignId}">
+        <button type="submit">채널 4개 링크 일괄 발급</button>
+    </form>
+</div>
+
+<h2>폼 생성</h2>
+<form th:action="@{/admin/campaigns/{id}/forms(id=${campaignId})}" method="post">
+    <div>
+        <label>템플릿
+            <select name="templateId" required>
+                <option th:each="t : ${detail.templates}" th:value="${t.id}" th:text="${t.name}">템플릿</option>
+            </select>
+        </label>
+    </div>
+    <div>
+        <label>폼 이름 <input type="text" name="name" required></label>
+    </div>
+    <button type="submit">폼 생성</button>
+</form>
+
+<h2>신청자 명단</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>채널</th>
+        <th>방문자</th>
+        <th>내용</th>
+        <th>일시</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="lead : ${detail.leads}">
+        <td th:text="${lead.channel}">-</td>
+        <td th:text="${lead.visitorId}">-</td>
+        <td>
+            <span th:each="entry : ${lead.payload}">
+                <span th:text="${entry.key}">k</span>=<span th:text="${entry.value}">v</span>;
+            </span>
+        </td>
+        <td th:text="${lead.createdAt}">-</td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(detail.leads)}">
+        <td colspan="4">신청자가 없습니다.</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

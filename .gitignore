@@ -48,3 +48,7 @@ out/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+### Tooling ###
+.claude/
+CLAUDE.md

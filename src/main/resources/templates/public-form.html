@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>신청 폼</title>
+</head>
+<body>
+<!--
+  업로드된 HTML은 이 iframe 안에서만 렌더링된다.
+  sandbox 값에 same-origin 허용 토큰을 넣지 않으므로 iframe 문서는 불투명 출처(opaque origin)로
+  격리되어 document.cookie 접근·동일 출처 자격증명 요청이 차단된다. (격리의 핵심)
+-->
+<iframe th:src="@{|/f/${code}/content|}"
+        sandbox="allow-forms allow-scripts"
+        style="width:100%; height:100vh; border:0;"
+        title="신청 폼"></iframe>
+</body>
+</html>
